@@ -1,14 +1,12 @@
 # swapeJs
 swapeJs is a lightweight javascript front end framework.
 
-## setting up
-First include the sjs script in your html
-<script src="sjs.js"></script>
+### Setting up
+First include the sjs script in your html `` <script src="sjs.js"></script>``
 
-and then in your html place the view tag
-<view>loading</view>
+and then in your html place the view tag `` <view>loading</view>``
 
-## Routes
+### Routes
 Setting up routes.
 
 ```
@@ -31,15 +29,18 @@ Setting up routes.
     sjs.init();
 ```
 
-route: defines the name of this route that is the same as the hash part of the url. [http://somewhere.com/#/home](http://somewhere.com/#/home) in this url the route is home.
+route: defines the name of this route that is the same as the hash part of 
+the url. ``http://somewhere.com/#/home`` in this url the route is home.
 
 controller: is the controller function attached to this route.
 
 template: this is the inline template that is shown in view tag.
 
-To change the route you can use attribute on a DOM object like this <a href="" sjs-route="home">Home<a>  sjs-route takes an argument and this is the same as the route/hash  so in this case by clicking on this link the state changes to  http://somewhere.com/#/home and the home controller gets executed after the template has been loaded to view tag.
+To change the route you can use attribute on a DOM object
+like this ``<a href="" sjs-route="home">Home<a>``  sjs-route takes an argument and this is the same as the route/hash  so in this case by clicking on this link 
+the state changes to  ``http://somewhere.com/#/home`` and the home controller gets executed after the template has been loaded to view tag.
 
-But you can not use the href to change the url. [This link do not change the state](#/donotwork) Only sjs.route attribute can tell the sjs to change the route and run the controller and get the template/templateUrl.
+But you can not use the href to change the url. ``<a href="#/home">Do not work</a>`` Only sjs.route attribute can tell the sjs to change the route and run the controller and get the template/templateUrl.
 
 The default argument tells the script to load this route if we do not have anything on the hash part of the url.
 
@@ -80,17 +81,17 @@ You can also use templateUrl instead of template to load the html file from the 
 ```
 
 ## API
-### sjs.route([{}]); // takes array of objects
+#### sjs.route([{}]); // takes array of objects
 Route object values:
 - route: name of the route.
 - controller: the function controller to run when this route is entered.
 - template: inline template string.
 - templateUrl: path to html template.
 
-### sjs.gotoState(arg);
+#### sjs.gotoState(arg);
 Change the state by passing the name of the argument to sjs.gotoState.
 
-### sjs.init();
+#### sjs.init();
 Run this when you are ready to run the app.
 
 //TODO: make api doc for the rest of the system
