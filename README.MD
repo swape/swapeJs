@@ -1,5 +1,5 @@
 # swapeJs
-swapeJs is a lightweight javascript front end framework.
+swapeJs is a lightweight javascript front-end framework.
 
 ### Setting up
 First include the sjs script in your html `` <script src="sjs.js"></script>``
@@ -29,7 +29,7 @@ Setting up routes.
     sjs.init();
 ```
 
-route: defines the name of this route that is the same as the hash part of 
+route: defines the name of this route that is the same as the hash part of
 the url. ``http://somewhere.com/#/home`` in this url the route is home.
 
 controller: is the controller function attached to this route.
@@ -37,7 +37,7 @@ controller: is the controller function attached to this route.
 template: this is the inline template that is shown in view tag.
 
 To change the route you can use attribute on a DOM object
-like this ``<a href="" sjs-route="home">Home<a>``  sjs-route takes an argument and this is the same as the route/hash  so in this case by clicking on this link 
+like this ``<a href="" sjs-route="home">Home<a>``  sjs-route takes an argument and this is the same as the route/hash  so in this case by clicking on this link
 the state changes to  ``http://somewhere.com/#/home`` and the home controller gets executed after the template has been loaded to view tag.
 
 But you can not use the href to change the url. ``<a href="#/home">Do not work</a>`` Only sjs.route attribute can tell the sjs to change the route and run the controller and get the template/templateUrl.
@@ -81,17 +81,51 @@ You can also use templateUrl instead of template to load the html file from the 
 ```
 
 ## API
-#### sjs.route([{}]); // takes array of objects
-Route object values:
-- route: name of the route.
-- controller: the function controller to run when this route is entered.
-- template: inline template string.
-- templateUrl: path to html template.
 
-#### sjs.gotoState(arg);
-Change the state by passing the name of the argument to sjs.gotoState.
+### sjs.init()
+Initializes the application.
 
-#### sjs.init();
-Run this when you are ready to run the app.
+### sjs.route([{ route, controller, template, templateUrl, *default*}])
+Takes an array of router objects.
 
-//TODO: make api doc for the rest of the system
+* **route**: [string] router name
+* **controller**: [function] takes a controller function
+* **template**: [string] inline template string
+* **templateUrl**: [string] path to HTML template
+* **default**: [boolean, optional, *default = false*] set as default route.
+
+### sjs.gotoState(route)
+Changes the state to the route name that is passed.
+* **route**: [string] router name
+
+### sjs.get(element, *attr*)
+Fetching one element *or* attribute of an element.
+* **element**: [string] element id or HTML tag
+* **attr**: [string, optional] attribute name
+
+Returns the DOM element. If specific attr is provided, then it returns its value.
+
+### sjs.getAll(element, *attr*)
+Fetching all elements that match _element_ arg.
+* **element**: [string] element id or HTML tag
+* **attr**: [string, optional] attribute name
+
+Returns an array with the DOM elements. If specific attr is provided, then it returns it in an array.
+
+### sjs.set(element, attr, data)
+Sets one or more attribute(s) of an element or tag.
+* **element**: [string] element if or HTML tag *(be careful when using tags)*
+* **attr**: [string] attribute (name) to set
+* **data**: [string] data to be set
+
+### sjs.add(element, attr, data)
+Adding data to exsisting attr.
+* **element**: [string] element if or HTML tag
+* **attr**: [string] attribute (name) to set
+* **data**: [string] data to be set
+
+### sjs.remove(element, attr, data)
+Removes data from attr. If there is not *data*, the attribute is instead removed.
+* **element**: [string] element if or HTML tag
+* **attr**: [string] attribute (name) to set
+* **data**: [string] data to be set
