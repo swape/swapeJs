@@ -1,57 +1,46 @@
-/* globals sjs */
-(function () {
+/* global sjs */
+(function() {
   'use strict';
 
+  function mainController() {
+    // Setting the innerHTML (DOM) value for elements with #myValue id.
+    sjs.set('p#myValue', 'innerHTML', 'This value is set by sjs.set');
+    sjs.set('h4#myValue2', 'innerHTML', 'This too.');
 
-  //-- controllers
-  function annetController() {
-    // do something with the dom when this template is loaded
-    sjs.set('#myb', 'class', 'blue');
-
-  }
-
-  function noeController() {
+    sjs.set('h4#myValue2', 'class', 'blue');
 
   }
 
-  function tullController() {
-    console.log('jeg er fra tull controller');
+  function secController() {
+    sjs.set('p#myValue', 'innerHTML', 'This is the second controller.');
   }
 
-  function redController() {
-    sjs.gotoState('noe');
+  function redirectController() {
+    // this controller sets the state to main.
+    sjs.gotoState('main');
   }
 
+  /* Routes */
 
-  // setting up the route
   sjs.route([
     {
-      route: 'noe',
-      controller: noeController,
-      template: 'Jeg er noe'
-  }, {
-      route: 'annet',
-      controller: annetController,
-      template: 'jeg er template <b id="myb">fra</b> annet. og jeg har lenke til <a href="" sjs-route="noe">noe lenka<a>',
-      default: true
-  },
+      route: 'main',
+      controller: mainController,
+      templateUrl: 'templates/main.html',
+      default: true,
+    },
     {
-      route: 'tull',
-      controller: tullController,
-      templateUrl: 'tull.html'
-  },
+      route: 'sec',
+      controller: secController,
+      template: '<h2>Hello from the second controller!</h2> <p id="myValue"></p>',
+    },
     {
-      route: 'red',
-      controller: redController,
-      template: 'I am still on red'
-}
-]);
+      route: 'redirect',
+      controller: redirectController,
+      template: 'Redirecting..',
+    },
+  ]);
 
-  // init this when you are ready to get the content and show content
+  // initializes sjs
   sjs.init();
-
-
-  //python -m SimpleHTTPServer 8000
-
-
 })();
