@@ -1,35 +1,32 @@
 <!doctype html>
 <html>
 
-<head>
-  <meta charset="utf-8">
-  <title>sjs</title>
-  <style>
-    .blue {
-      color: blue
-    }
+  <head>
+    <meta charset="utf-8">
+    <title>sjs example code</title>
 
-  </style>
-</head>
+    <style>
+      .blue {
+        color: blue;
+      }
+    </style>
+  </head>
 
-<body id="main">
-  <p>
-    Use the links like this
-    <a href="" sjs-route="noe">noe lenka<a>
-    <a href="" sjs-route="annet">annet sted</a>
-    <a href="" sjs-route="tull">Fra en template URL</a>
-  </p>
+  <body id="main">
 
-  <p>
-    Do not use it like this
-    <a href="#/noe">Direkt lenke til noe</a>
-    <a href="#/annet">Direkt lenke til annet</a>
-  </p>
+    <p>
+      <!-- sjs-route attribute links the routes -->
+      <a href="" sjs-route="main">main<a>
+      <a href="" sjs-route="sec">second</a>
+      <a href="" sjs-route="redirect">redirect</a>
+    </p>
 
-  <view>loading</view>
+    <!-- Templates is rendered under <view> tag -->
+    <view>loading</view>
 
-  <script src="../../src/sjs.js"></script>
-  <script src="app.js"></script>
-</body>
+
+    <script src="../../src/sjs.js"></script>
+    <script src="app.js"></script>
+  </body>
 
 </html>
