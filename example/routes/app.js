@@ -1,5 +1,5 @@
 /* global sjs */
-(function() {
+(function () {
   'use strict';
 
   function mainController() {
