@@ -1,12 +1,12 @@
 # swapeJs
 swapeJs is a lightweight javascript front-end framework.
 
-### Setting up
-First include the sjs script in your html `` <script src="sjs.js"></script>``
+## Setting up
+First include the sjs script in your html `<script src="sjs.js"></script>`
 
-and then in your html place the view tag `` <view>loading</view>``
+and then in your html place the view tag `<view>loading</view>`
 
-### Routes
+## Routes
 Setting up routes.
 
 ```
@@ -29,18 +29,15 @@ Setting up routes.
     sjs.init();
 ```
 
-route: defines the name of this route that is the same as the hash part of
-the url. ``http://somewhere.com/#/home`` in this url the route is home.
+route: defines the name of this route that is the same as the hash part of the url. `http://somewhere.com/#/home` in this url the route is home.
 
 controller: is the controller function attached to this route.
 
 template: this is the inline template that is shown in view tag.
 
-To change the route you can use attribute on a DOM object
-like this ``<a href="" sjs-route="home">Home<a>``  sjs-route takes an argument and this is the same as the route/hash  so in this case by clicking on this link
-the state changes to  ``http://somewhere.com/#/home`` and the home controller gets executed after the template has been loaded to view tag.
+To change the route you can use attribute on a DOM object like this `<a href="" sjs-route="home">Home<a>`  sjs-route takes an argument and this is the same as the route/hash  so in this case by clicking on this link the state changes to  `http://somewhere.com/#/home` and the home controller gets executed after the template has been loaded to view tag.
 
-But you can not use the href to change the url. ``<a href="#/home">Do not work</a>`` Only sjs.route attribute can tell the sjs to change the route and run the controller and get the template/templateUrl.
+But you can not use the href to change the url. `<a href="#/home">Do not work</a>` Only sjs.route attribute can tell the sjs to change the route and run the controller and get the template/templateUrl.
 
 The default argument tells the script to load this route if we do not have anything on the hash part of the url.
 
@@ -81,51 +78,55 @@ You can also use templateUrl instead of template to load the html file from the 
 ```
 
 ## API
-
 ### sjs.init()
 Initializes the application.
 
 ### sjs.route([{ route, controller, template, templateUrl, *default*}])
 Takes an array of router objects.
-
-* **route**: [string] router name
-* **controller**: [function] takes a controller function
-* **template**: [string] inline template string
-* **templateUrl**: [string] path to HTML template
-* **default**: [boolean, optional, *default = false*] set as default route.
+- **route**: [string] router name
+- **controller**: [function] takes a controller function
+- **template**: [string] inline template string
+- **templateUrl**: [string] path to HTML template
+- **default**: [boolean, optional, _default = false_] set as default route.
 
 ### sjs.gotoState(route)
 Changes the state to the route name that is passed.
-* **route**: [string] router name
+- **route**: [string] router name
+
+### sjs.getState()
+Return the current url route
+
+### sjs.getHash()
+Return array of current url route if the route looks like this: /#sec/1234 then array with ['sec','1234'] is returned
 
 ### sjs.get(element, *attr*)
-Fetching one element *or* attribute of an element.
-* **element**: [string] element id or HTML tag
-* **attr**: [string, optional] attribute name
+Fetching one element _or_ attribute of an element.
+- **element**: [string] element id or HTML tag
+- **attr**: [string, optional] attribute name
 
 Returns the DOM element. If specific attr is provided, then it returns its value.
 
 ### sjs.getAll(element, *attr*)
 Fetching all elements that match _element_ arg.
-* **element**: [string] element id or HTML tag
-* **attr**: [string, optional] attribute name
+- **element**: [string] element id or HTML tag
+- **attr**: [string, optional] attribute name
 
 Returns an array with the DOM elements. If specific attr is provided, then it returns it in an array.
 
 ### sjs.set(element, attr, data)
 Sets one or more attribute(s) of an element or tag.
-* **element**: [string] element if or HTML tag *(be careful when using tags)*
-* **attr**: [string] attribute (name) to set
-* **data**: [string] data to be set
+- **element**: [string] element if or HTML tag _(be careful when using tags)_
+- **attr**: [string] attribute (name) to set
+- **data**: [string] data to be set
 
 ### sjs.add(element, attr, data)
 Adding data to exsisting attr.
-* **element**: [string] element if or HTML tag
-* **attr**: [string] attribute (name) to set
-* **data**: [string] data to be set
+- **element**: [string] element if or HTML tag
+- **attr**: [string] attribute (name) to set
+- **data**: [string] data to be set
 
 ### sjs.remove(element, attr, data)
-Removes data from attr. If there is not *data*, the attribute is instead removed.
-* **element**: [string] element if or HTML tag
-* **attr**: [string] attribute (name) to set
-* **data**: [string] data to be set
+Removes data from attr. If there is not _data_, the attribute is instead removed.
+- **element**: [string] element if or HTML tag
+- **attr**: [string] attribute (name) to set
+- **data**: [string] data to be set
