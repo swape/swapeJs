@@ -247,6 +247,12 @@ var sjs = (function () {
       routes = appRoutes;
     },
     gotoState: gotoState,
+    getState: function () {
+      return state;
+    },
+    getHash: function () {
+      return hash;
+    },
     // getting one elm or attribute of one element
     get: getElm,
     // getting all elm or attributes of all elm
@@ -306,7 +312,7 @@ var sjs = (function () {
       }
 
     },
-    // remove
+    // remove attr or data
     remove: function (inValue, attr, data) {
       if (attr) {
         var elm = fastQuery(inValue, true);
@@ -342,8 +348,6 @@ var sjs = (function () {
 
     // xhr
     xhr: getXhr
-      // routing
-      // localstorage
 
   };
 
