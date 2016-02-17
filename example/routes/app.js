@@ -20,6 +20,10 @@
     sjs.gotoState('main');
   }
 
+  function thirdController() {
+    console.log('I am from third controller');
+  }
+
   /* Routes */
 
   sjs.route([
@@ -34,6 +38,12 @@
       controller: secController,
       template: '<h2>Hello from the second controller!</h2> <p id="myValue"></p>',
     },
+    {
+      route: 'third',
+      controller: thirdController,
+      templateUrl: 'templates/third.html',
+    },
+
     {
       route: 'redirect',
       controller: redirectController,

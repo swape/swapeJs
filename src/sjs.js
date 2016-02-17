@@ -26,6 +26,104 @@ var sjs = (function () {
     }
   }
 
+  //--- remove
+  function remove(inValue, attr, data) {
+    if (attr) {
+      var elm = fastQuery(inValue, true);
+      if (elm && typeof elm !== 'undefined') {
+        if (elm.length > 0) {
+          for (var x = 0; x < elm.length; x++) {
+            //if the element excist
+            if (elm[x]) {
+              // if we have the given attr
+              if (elm[x][attr]) {
+                // if we have the data, remove from that attribute
+                if (data) {
+                  elm[x][attr] = elm[x][attr].replace(data, '')
+                    .trim();
+                } else {
+                  // if we do not have any data, remove the attribute itself
+                  elm[x][attr] = null;
+                  elm[x].removeAttribute(attr);
+                }
+              }
+            }
+          }
+          return elm;
+        }
+      }
+    } else {
+      // TODO: remove the element if we do not have attr or data
+
+      return false;
+    }
+
+  }
+
+  //--- adding element
+  function add(inValue, attr, data) {
+    if (attr && data) {
+      var elm = (typeof inValue === 'object') ? inValue : fastQuery(inValue, true);
+      if (elm && typeof elm !== 'undefined') {
+        if (elm.length > 0) {
+          for (var x = 0; x < elm.length; x++) {
+            if (elm[x]) {
+              if (elm[x][attr]) {
+                if (attr === 'class') {
+                  elm[x].className = data;
+                } else {
+                  elm[x][attr] = elm[x][attr] + ' ' + data;
+                }
+              } else {
+                if (attr === 'class') {
+                  elm.className = data;
+                } else {
+                  elm.attr = data;
+                }
+              }
+            }
+          }
+          return elm;
+        }
+      }
+    } else {
+      return false;
+    }
+
+  }
+  //--- setting element
+  function set(inValue, attr, data) {
+    var elm = fastQuery(inValue, true);
+
+    if (elm && typeof elm !== 'undefined') {
+      if (attr) {
+
+        if (elm && elm.length > 0) {
+
+          for (var x = 0; x < elm.length; x++) {
+            if (elm[x]) {
+              if (attr === 'class') {
+                elm[x].className = data;
+              } else {
+                elm[x][attr] = data;
+              }
+            }
+          }
+        } else {
+          if (attr === 'class') {
+            elm.className = data;
+          } else {
+            elm.attr = data;
+          }
+        }
+
+        return elm;
+      }
+    } else {
+      return false;
+    }
+  }
+
   //--- getting one element
   function getElm(inValue, attr) {
     var elm = fastQuery(inValue);
@@ -107,22 +205,64 @@ var sjs = (function () {
             view.innerHTML = data;
             runController(inValue);
             templateCache[inValue.templateUrl] = data;
+          }, function (err) {
+            console.log(err);
           });
       }
-
-
     }
+    setActiveFromHash();
 
   }
 
   //--- running the controller and check for new sjs-route links to bind click to
   function runController(inValue) {
+    // adding all the sjs-include templates
+    checkSjsInclude();
 
     if (inValue.controller) {
-      //check if any links in the new view needs to be controlled by our router
-      var templateLinks = getAllElm('view [sjs-route]');
-      checkForRouteLinks(templateLinks);
-      inValue.controller();
+      inValue.controller(); // TODO: run the controller after all the checkSjs is done
+    }
+  }
+
+  // setting the template from url to the obj
+  function attachTemplate(obj, url) {
+    return new Promise(function (resolve, reject) {
+      var templateLinks = [];
+      if (templateCache[url]) {
+        obj.innerHTML = templateCache[url];
+
+        //check if any links in the new view needs to be controlled by our router
+        templateLinks = obj.querySelectorAll('view [sjs-route]');
+        checkForRouteLinks(templateLinks);
+
+      } else {
+        // getting the external template from url
+        getXhr('get', url)
+          .then(function (data) {
+            obj.innerHTML = data;
+            templateCache[url] = data;
+
+            //check if any links in the new view needs to be controlled by our router
+            templateLinks = obj.querySelectorAll('view [sjs-route]');
+            checkForRouteLinks(templateLinks);
+
+            resolve('ok');
+          }, function () {
+            reject('could not find ' + url);
+          });
+      }
+    });
+  }
+
+  function checkSjsInclude() {
+    // getting the new view html content
+    var sjsAttrib = getAllElm('view [sjs-include]');
+    var url = '';
+    for (var x = 0; sjsAttrib.length > x; x++) {
+      url = sjsAttrib[x].getAttribute('sjs-include');
+      if (url && url.length > 0) {
+        attachTemplate(sjsAttrib[x], url);
+      }
     }
   }
 
@@ -162,6 +302,12 @@ var sjs = (function () {
     for (x = 0; inValue.length > x; x++) {
       inValue[x].addEventListener('click', attachRouterLinks);
     }
+  }
+
+  function setActiveFromHash() {
+    remove('[sjs-route]', 'className', 'active');
+    var elm = getElm('[sjs-route="' + hash[0] + '"]');
+    elm.className = (elm.className) ? elm.className + ' active' : 'active';
   }
 
   //--- do an XHR call
@@ -225,20 +371,21 @@ var sjs = (function () {
     doTheRoute();
   }
 
-  /*
-  getting ready
-  */
+  /*****************
+    getting ready
+  *****************/
 
   getHash();
 
   // getting all the links for view
   var links = getAllElm('[sjs-route]');
-  checkForRouteLinks(links);
-
   var view = getElm('view');
 
-  //window.onhashchange = doTheRoute;
+  checkForRouteLinks(links);
 
+
+
+  //--- returning all the functions
   return {
     init: function () {
       doTheRoute();
@@ -258,97 +405,13 @@ var sjs = (function () {
     // getting all elm or attributes of all elm
     getAll: getAllElm,
     // setting one or more value for elm
-    set: function (inValue, attr, data) {
-      var elm = fastQuery(inValue, true);
-
-      if (elm && typeof elm !== 'undefined') {
-        if (attr) {
-
-          if (elm && elm.length > 0) {
-
-            for (var x = 0; x < elm.length; x++) {
-              if (elm[x]) {
-                if (attr === 'class') {
-                  elm[x].className = data;
-                } else {
-                  elm[x][attr] = data;
-                }
-              }
-            }
-          } else {
-            if (attr === 'class') {
-              elm.className = data;
-            } else {
-              elm.attr = data;
-            }
-          }
-
-          return elm;
-        }
-      } else {
-        return false;
-      }
-    },
+    set: set,
     // adding a data to existing attr
-    add: function (inValue, attr, data) {
-      if (attr && data) {
-        var elm = fastQuery(inValue, true);
-        if (elm && typeof elm !== 'undefined') {
-          if (elm.length > 0) {
-            for (var x = 0; x < elm.length; x++) {
-              if (elm[x]) {
-                if (elm[x][attr]) {
-                  elm[x][attr] = elm[x][attr] + ' ' + data;
-                } else {
-                  elm[x][attr] = data;
-                }
-              }
-            }
-            return elm;
-          }
-        }
-      } else {
-        return false;
-      }
-
-    },
+    add: add,
     // remove attr or data
-    remove: function (inValue, attr, data) {
-      if (attr) {
-        var elm = fastQuery(inValue, true);
-        if (elm && typeof elm !== 'undefined') {
-          if (elm.length > 0) {
-            for (var x = 0; x < elm.length; x++) {
-              //if the element excist
-              if (elm[x]) {
-                // if we have the given attr
-                if (elm[x][attr]) {
-                  // if we have the data, remove from that attribute
-                  if (data) {
-                    elm[x][attr] = elm[x][attr].replace(data, '')
-                      .trim();
-                  } else {
-                    // if we do not have any data, remove the attribute itself
-                    elm[x][attr] = null;
-                    elm[x].removeAttribute(attr);
-                  }
-                }
-              }
-            }
-            return elm;
-          }
-        }
-      } else {
-        // TODO: remove the element if we do not have attr or data
-
-        return false;
-      }
-
-    },
-
+    remove: remove,
     // xhr
     xhr: getXhr
-
   };
 
 })();

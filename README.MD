@@ -77,6 +77,16 @@ You can also use templateUrl instead of template to load the html file from the 
     }
 ```
 
+In templates you can include other templates by using sjs-template like this:
+
+```
+<div sjs-include="templates/partial.html"></div>
+```
+
+This is going to include the html from templates/partial.html into that div.
+
+The active link with sjs-route attribute get the active class when they are active.
+
 ## API
 ### sjs.init()
 Initializes the application.
