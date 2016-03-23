@@ -16,14 +16,14 @@ Setting up routes.
     }
 
     // setting up the home route
-    sjs.route([
+    sjs.objRoutes.routes = [
       {
         route: 'home',
         controller: homeController,
         template: 'I am the template',
         default: true
     }
-    ]);
+    ];
 
     // run the init function when everything is ready
     sjs.init();
@@ -52,19 +52,18 @@ But be careful not to make a loop.
 You can make several routes in sjs.route object. But only one of them can be the default
 
 ```
-    sjs.route([
+    sjs.objRoutes.routes = [
       {
         route: 'home',
         controller: homeController,
         template: 'I am the template',
         default: true
-    },
-    {
+    },{
       route: 'settings',
       controller: settingsController,
-      template: 'I am the settings controller',
+      template: 'I am the settings controller'
     }
-    ]);
+    ];
 ```
 
 You can also use templateUrl instead of template to load the html file from the server.
@@ -73,7 +72,7 @@ You can also use templateUrl instead of template to load the html file from the 
     {
       route: 'settings',
       controller: settingsController,
-      templateUrl: 'partials/settings.html',
+      templateUrl: 'partials/settings.html'
     }
 ```
 
@@ -91,7 +90,7 @@ The active link with sjs-route attribute get the active class when they are acti
 ### sjs.init()
 Initializes the application.
 
-### sjs.route([{ route, controller, template, templateUrl, *default*}])
+### sjs.objRoutes.routes = [{ route, controller, template, templateUrl, *default*}]
 Takes an array of router objects.
 - **route**: [string] router name
 - **controller**: [function] takes a controller function
@@ -102,12 +101,6 @@ Takes an array of router objects.
 ### sjs.gotoState(route)
 Changes the state to the route name that is passed.
 - **route**: [string] router name
-
-### sjs.getState()
-Return the current url route
-
-### sjs.getHash()
-Return array of current url route if the route looks like this: /#sec/1234 then array with ['sec','1234'] is returned
 
 ### sjs.get(element, *attr*)
 Fetching one element _or_ attribute of an element.
