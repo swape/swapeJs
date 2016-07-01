@@ -1,25 +1,25 @@
-// sjs.js
+'use strict';
 
+const sjs = (function () {
 
-var sjs = (function () {
-	'use strict';
-	var objRoutes = {
+	let objRoutes = {
 		routes: [],
 		state: '',
 		hash: '',
 		startHashSign: '#/'
 	};
+	let view = '';
 
-	var blnRoute = false; // we have a match
-	var defalutRoute = false;
-	var templateCache = {};
-	var x = 0;
+	let blnRoute = false; // this is turned to true if we find a default route
+	let defalutRouteObj = false; // contains the default route object
+	let templateCache = {}; // caching the templates
+	// let x = 0;
 
-	//--- getting the dom elemnt
+	// getting the dom elemnt in the fastest way
 	function fastQuery(query, blnAll) {
-		var n = query.split(' ')
+		let n = query.split(' ')
 			.length;
-		var name = query.charAt(0);
+		let name = query.charAt(0);
 		// getting all
 		if (name === '#' && n === 1) {
 			return document.getElementById(query.replace('#', ''));
@@ -31,10 +31,10 @@ var sjs = (function () {
 	//--- remove
 	function remove(inValue, attr, data) {
 		if (attr) {
-			var elm = fastQuery(inValue, true);
+			let elm = fastQuery(inValue, true);
 			if (elm && typeof elm !== 'undefined') {
 				if (elm.length > 0) {
-					for (var x = 0; x < elm.length; x++) {
+					for (let x = 0; x < elm.length; x++) {
 						//if the element excist
 						if (elm[x]) {
 							// if we have the given attr
@@ -65,10 +65,10 @@ var sjs = (function () {
 	//--- adding element
 	function add(inValue, attr, data) {
 		if (attr && data) {
-			var elm = (typeof inValue === 'object') ? inValue : fastQuery(inValue, true);
+			let elm = (typeof inValue === 'object') ? inValue : fastQuery(inValue, true);
 			if (elm && typeof elm !== 'undefined') {
 				if (elm.length > 0) {
-					for (var x = 0; x < elm.length; x++) {
+					for (let x = 0; x < elm.length; x++) {
 						if (elm[x]) {
 							if (elm[x][attr]) {
 								if (attr === 'class') {
@@ -96,14 +96,14 @@ var sjs = (function () {
 
 	//--- setting element
 	function set(inValue, attr, data) {
-		var elm = fastQuery(inValue, true);
+		let elm = fastQuery(inValue, true);
 
 		if (elm && typeof elm !== 'undefined') {
 			if (attr) {
 
 				if (elm && elm.length > 0) {
 
-					for (var x = 0; x < elm.length; x++) {
+					for (let x = 0; x < elm.length; x++) {
 						if (elm[x]) {
 							if (attr === 'class') {
 								elm[x].className = data;
@@ -129,7 +129,7 @@ var sjs = (function () {
 
 	//--- getting one element
 	function getElm(inValue, attr) {
-		var elm = fastQuery(inValue);
+		let elm = fastQuery(inValue);
 
 		if (elm) {
 			if (attr && typeof elm[attr] !== 'undefined') {
@@ -142,12 +142,12 @@ var sjs = (function () {
 
 	//--- getting all the elements
 	function getAllElm(inValue, attr) {
-		var elm = fastQuery(inValue, true);
+		let elm = fastQuery(inValue, true);
 		if (elm) {
 			if (attr) {
-				var out = [];
+				let out = [];
 				if (elm.length > 0) {
-					for (var x = 0; x < elm.length; x++) {
+					for (let x = 0; x < elm.length; x++) {
 						if (elm[x]) {
 							if (attr && elm[x] && typeof elm[x][attr] !== 'undefined' && elm[x][attr].trim() !== '') {
 								out.push(elm[x][attr]);
@@ -167,25 +167,26 @@ var sjs = (function () {
 
 	//--- getting the right controller and template base on routes
 	function doTheRoute() {
-		var x = 0;
+		let x = 0;
 		//- showing the template and run the controller based on route
 		if (objRoutes.routes && objRoutes.routes.length > 0) {
 			for (x = 0; objRoutes.routes.length > x; x++) {
 				if (objRoutes.routes[x].route === objRoutes.state) {
 					runFromRoute(objRoutes.routes[x]);
-					//- we found the route now setting this var so we dont look for the default route
+					//- we found the route now setting this let so we dont look for the default route
 					blnRoute = true;
+					break;
 				}
 				// setting the default route
 				if (objRoutes.routes[x].default) {
-					defalutRoute = objRoutes.routes[x];
+					defalutRouteObj = objRoutes.routes[x];
 				}
 
 			} //for
 
 			// default route
-			if (blnRoute === false && defalutRoute) {
-				runFromRoute(defalutRoute);
+			if (blnRoute === false && defalutRouteObj) {
+				runFromRoute(defalutRouteObj);
 			}
 		}
 	}
@@ -230,7 +231,7 @@ var sjs = (function () {
 	// setting the template from url to the obj
 	function attachTemplate(obj, url) {
 		return new Promise(function (resolve, reject) {
-			var templateLinks = [];
+			let templateLinks = [];
 			if (templateCache[url]) {
 				obj.innerHTML = templateCache[url];
 
@@ -259,9 +260,9 @@ var sjs = (function () {
 
 	function checkSjsInclude() {
 		// getting the new view html content
-		var sjsAttrib = getAllElm('view [sjs-include]');
-		var url = '';
-		for (var x = 0; sjsAttrib.length > x; x++) {
+		let sjsAttrib = getAllElm('view [sjs-include]');
+		let url = '';
+		for (let x = 0; sjsAttrib.length > x; x++) {
 			url = sjsAttrib[x].getAttribute('sjs-include');
 			if (url && url.length > 0) {
 				attachTemplate(sjsAttrib[x], url);
@@ -302,14 +303,14 @@ var sjs = (function () {
 	//--- looping through links to attach the listener
 	function checkForRouteLinks(inValue) {
 		//- bind the click on all links // TODO: refactor
-		for (x = 0; inValue.length > x; x++) {
+		for (let x = 0; inValue.length > x; x++) {
 			inValue[x].addEventListener('click', attachRouterLinks);
 		}
 	}
 
 	function setActiveFromHash() {
 		remove('[sjs-route]', 'className', 'active');
-		var elm = getElm('[sjs-route="' + objRoutes.hash[0] + '"]');
+		let elm = getElm('[sjs-route="' + objRoutes.hash[0] + '"]');
 		elm.className = (elm.className) ? elm.className + ' active' : 'active';
 	}
 
@@ -318,11 +319,11 @@ var sjs = (function () {
 		// Return a new promise.
 		return new Promise(function (resolve, reject) {
 			// Do the usual XHR stuff
-			var req = new XMLHttpRequest();
+			let req = new XMLHttpRequest();
 			method = method.toUpperCase();
 
 			if (method !== 'POST') {
-				var arrParameters = [],
+				let arrParameters = [],
 					key;
 				if (typeof data !== 'undefined' && data !== null) {
 					url = (url.match(/\?/igm)) ? url + '&' : url + '?';
@@ -337,7 +338,7 @@ var sjs = (function () {
 
 			// header
 			if (typeof headers !== 'undefined') {
-				var header = '';
+				let header = '';
 				for (header in headers) {
 					req.setRequestHeader(header, headers[header]);
 				}
@@ -378,18 +379,26 @@ var sjs = (function () {
 	  getting ready
 	*****************/
 
-	getHash();
+	// getHash();
 
 	// getting all the links for view
-	var links = getAllElm('[sjs-route]');
-	var view = getElm('view');
+	// let links = getAllElm('[sjs-route]');
+	// let view = getElm('view');
 
-	checkForRouteLinks(links);
+	// checkForRouteLinks(links);
 
 
 	//--- returning all the functions
 	return {
 		init: function () {
+			getHash();
+
+			// getting all the links for view
+			let links = getAllElm('[sjs-route]');
+			view = getElm('view');
+
+			checkForRouteLinks(links);
+
 			doTheRoute();
 		},
 		objRoutes: objRoutes,
