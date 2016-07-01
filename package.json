@@ -1,0 +1,29 @@
+{
+    "name": "swapejs",
+    "version": "1.0.0",
+    "description": "Javascript library",
+    "main": "gulpfile.js",
+    "directories": {
+        "example": "example",
+        "test": "test"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/swape/swapeJs.git"
+    },
+    "author": "Alireza Balouch",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/swape/swapeJs/issues"
+    },
+    "homepage": "https://github.com/swape/swapeJs#readme",
+    "devDependencies": {
+        "gulp": "^3.9.1",
+        "gulp-babel": "^6.1.2",
+        "gulp-load-plugins": "^1.2.4",
+        "gulp-uglifyjs": "^0.6.2"
+    }
+}
