@@ -1,72 +1,71 @@
 <!doctype html>
 <html>
 
-<head>
-  <meta charset="utf-8">
-  <title>sjs example code</title>
+    <head>
+        <meta charset="utf-8">
+        <title>sjs example code</title>
 
-  <style>
-    .blue {
-      color: blue;
-    }
-    
-    body {
-      font-family: sans-serif;
-      margin: 0;
-      padding: 0;
-    }
-    
-    section {
-      padding: 40px;
-    }
-    
-    nav {
-      background-color: gainsboro;
-      padding: 10px;
-    }
-    
-    .active {
-      border-bottom: 2px solid #444;
-    }
-    
-    p {
-      padding: 20px;
-    }
-    
-    a {
-      text-decoration: none;
-      padding: 3px 10px;
-      border-radius: 5px;
-      background-color: tomato;
-      color: #fff;
-      margin: 2px;
-    }
-    
-    a:hover {
-      box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-      background-color: orange;
-    }
+        <style>
+            .blue {
+                color: blue;
+            }
 
-  </style>
-</head>
+            body {
+                font-family: sans-serif;
+                margin: 0;
+                padding: 0;
+            }
 
-<body id="main">
+            section {
+                padding: 40px;
+            }
 
-  <nav>
-    <!-- sjs-route attribute links the routes -->
-    <a href="" sjs-route="main">Main</a>
-    <a href="" sjs-route="sec">Second</a>
-    <a href="" sjs-route="third">Third</a>
-    <a href="" sjs-route="redirect">Redirect</a>
-  </nav>
+            nav {
+                background-color: gainsboro;
+                padding: 10px;
+            }
 
-  <!-- Templates is rendered under <view> tag -->
-  <section>
-    <view>loading</view>
-  </section>
+            .active {
+                border-bottom: 2px solid #444;
+            }
 
-  <script src="../../src/sjs.min.js"></script>
-  <script src="app.js"></script>
-</body>
+            p {
+                padding: 20px;
+            }
+
+            a {
+                text-decoration: none;
+                padding: 3px 10px;
+                border-radius: 5px;
+                background-color: tomato;
+                color: #fff;
+                margin: 2px;
+            }
+            a:hover {
+                box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+                background-color: orange;
+            }
+
+        </style>
+    </head>
+
+    <body id="main">
+
+        <nav>
+            <!-- sjs-route attribute links the routes -->
+            <a href="" sjs-route="main">Main</a>
+            <a href="" sjs-route="sec">Second</a>
+            <a href="" sjs-route="third">Third</a>
+            <a href="" sjs-route="redirect">Redirect</a>
+        </nav>
+
+        <!-- Templates is rendered under <view> tag -->
+        <section>
+            <view>loading</view>
+        </section>
+
+        <script src="../../dist/sjs.min.js"></script>
+        <script src="app.js"></script>
+    </body>
 
 </html>
