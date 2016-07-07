@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>sjs example elements</title>
+    </head>
+    <body id="main">
+        <div id="xhr-div">
+            loading...
+        </div>
+
+        <div id="xhr-div2">
+            loading...
+        </div>
+
+        <script src="../../dist/sjs.js"></script>
+        <script>
+            var x = sjs.xhr;
+            var e = sjs.elm;
+
+            // getting some html into a div
+
+            x.get('./partial/part1.html').then(function(data) {
+                e.get('#xhr-div').innerHTML = data;
+            });
+
+            // using xhr object diectly and passing some data
+            x.xhr('GET', './partial/part2.html', {
+                x: 1,
+                y: 2
+            }).then(function(data) {
+                e.get('#xhr-div2').innerHTML = data;
+            });
+        </script>
+    </body>
+</html>
