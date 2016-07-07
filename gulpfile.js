@@ -14,7 +14,8 @@ gulp.task('minify', ['babel'], function () {
 gulp.task('babel', function () {
 	return gulp.src(['src/sjs.js'])
 		.pipe($.babel({
-			presets: ['es2015']
+			presets: ['es2015'],
+			plugins: ['es6-promise']
 		}))
 		.pipe(gulp.dest(buildPath));
 });
