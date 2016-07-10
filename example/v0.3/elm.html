@@ -1,41 +1,41 @@
 <!doctype html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <title>sjs example elements</title>
-    </head>
-    <body id="main">
-        <h1>Testing elements</h1>
-        <div id="somediv">
-            This is the div you are looking for.
-        </div>
+  <head>
+    <meta charset="utf-8">
+    <title>sjs example elements</title>
+  </head>
+  <body id="main">
+    <h1>Testing elements</h1>
+    <div id="somediv">
+      This is the div you are looking for.
+    </div>
 
-        <span class="other">1</span>
-        <span class="other">2</span>
-        <span class="other">2</span>
-        <span class="other">4</span>
+    <span class="other">1</span>
+    <span class="other">2</span>
+    <span class="other">2</span>
+    <span class="other">4</span>
 
-        <script src="../../dist/sjs.js"></script>
-        <script>
-            var e = sjs.elm;
+    <script src="../../dist/sjs.js"></script>
+    <script>
+      var e = sjs.elm;
 
-            //getting the elements
+      //getting the elements
 
-            console.log(e.get('h1').style.color = 'blue'); // getting a tag
+      console.log(e.get('h1').style.color = 'blue'); // getting a tag
 
-            console.log(e.get('.other').style.color = 'blue'); // first element
+      console.log(e.get('.other').style.color = 'blue'); // first element
 
-            // setting style with setStyle
+      // setting style with setStyle
 
-            console.log(e.get('#somediv').setStyle('color', 'tomato'));
+      console.log(e.get('#somediv').setStyle('color', 'tomato'));
 
-            // getting an array of objects and chain the setStyle
+      // getting an array of objects and chain the setStyle
 
-            console.log(e.get('.other', true).setStyle('color', 'red').setStyle('padding', '5px').setStyle('margin', '5px'));
+      console.log(e.get('.other', true).setStyle('color', 'red').setStyle('padding', '5px').setStyle('margin', '5px'));
 
-            console.log(e.getAll('.other').setStyle('background-color', 'yellow')); // getting all the elements. Same as above
+      console.log(e.getAll('.other').setStyle('background-color', 'yellow')); // getting all the elements. Same as above
 
-            // adding elements removing elemetns adding attributes removing attributes appending elements appending attributes prepend element
-        </script>
-    </body>
+      // adding elements removing elemetns adding attributes removing attributes appending elements appending attributes prepend element
+    </script>
+  </body>
 </html>
