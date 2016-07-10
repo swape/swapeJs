@@ -114,6 +114,7 @@ var sjs = function () {
 		_currentRoute: '',
 		_defaultView: '',
 		_config: {},
+		_altView: '',
 
 		add: function add(rObj) {
 			router._routes.push(rObj);
@@ -121,13 +122,36 @@ var sjs = function () {
 		},
 
 		init: function init(config) {
-			// TODO: getting current route
 			// TODO: override the sjs-links
+			router._bindLinks(elm.get('a[sjs-link]', true));
 			// TODO: listen to the cahnge
 			router._config = config;
 			router._getPath();
 			router._findRouteMatch();
 			return router;
+		},
+
+		_bindLink: function _bindLink(e) {
+			e.preventDefault();
+
+			var aText = e.target.innerText.trim().replace(/ /ig, '_');
+
+			// if (router._config && typeof router._config.mode !== 'undefined' && router._config.mode === 'history') {
+			window.history.pushState(null, aText, e.target.href);
+			// } else {
+			//
+			// }
+			router._getPath();
+			router._altView = e.target.getAttribute('sjs-link');
+			router._findRouteMatch();
+		},
+
+		_bindLinks: function _bindLinks(links) {
+			if (links && links.length > 0) {
+				for (var x = 0; links.length > x; x++) {
+					links[x].addEventListener('click', router._bindLink);
+				}
+			}
 		},
 
 		_getPath: function _getPath() {
@@ -157,20 +181,23 @@ var sjs = function () {
 
 		_changeView: function _changeView(rObj) {
 			// TODO: add support for sjs-link view
+			var view = router._defaultView === '' ? elm.get('sjs-view') : router._defaultView;
+			router._defaultView = view;
 
-			if (router._defaultView === '') {
-				// get the default view
-				router._defaultView = elm.get('sjs-view');
+			// override if the link has a view ID
+			if (router._altView && router._altView !== '') {
+				view = elm.get('#' + router._altView);
 			}
 
-			if (router._defaultView !== '') {
+			if (view !== '') {
 				if (rObj.view && rObj.view !== '') {
-					var view = elm.get('#' + rObj.view);
+					// override if the router object have a view
+					view = elm.get('#' + rObj.view);
 					if (view) {
 						view.innerHTML = rObj.template;
 					}
 				} else {
-					router._defaultView.innerHTML = rObj.template;
+					view.innerHTML = rObj.template;
 				}
 			}
 		},

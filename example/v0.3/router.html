@@ -29,7 +29,13 @@
         }
       }).add({
         path: '/about',
-        templateUrl: './partial/part1.html',
+        templateUrl: '/example/v0.3/partial/part1.html',
+        controller: function() {
+          console.log('I am the about controller');
+        }
+      }).add({
+        path: '/other',
+        template: '<b>This should replace the other view</b>',
         controller: function() {
           console.log('I am the about controller');
         }
@@ -38,7 +44,7 @@
       // showing the content on different view
       r.add({
         path: '/example/v0.3/router.html',
-        templateUrl: './partial/part2.html',
+        templateUrl: '/example/v0.3/partial/part2.html',
         view: 'other-view',
         controller: function() {
           console.log('I am on this controller');

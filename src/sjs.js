@@ -117,6 +117,7 @@ const sjs = (() => {
 		_currentRoute: '',
 		_defaultView: '',
 		_config: {},
+		_altView: '',
 
 		add: (rObj) => {
 			router._routes.push(rObj);
@@ -124,13 +125,38 @@ const sjs = (() => {
 		},
 
 		init: (config) => {
-			// TODO: getting current route
 			// TODO: override the sjs-links
+			router._bindLinks(elm.get('a[sjs-link]', true));
 			// TODO: listen to the cahnge
 			router._config = config;
 			router._getPath();
 			router._findRouteMatch();
 			return router;
+		},
+
+		_bindLink: (e) => {
+			e.preventDefault();
+
+			let aText = e.target.innerText.trim().replace(/ /ig, '_');
+
+
+			// if (router._config && typeof router._config.mode !== 'undefined' && router._config.mode === 'history') {
+			window.history.pushState(null, aText, e.target.href);
+			// } else {
+			//
+			// }
+			router._getPath();
+			router._altView = e.target.getAttribute('sjs-link');
+			router._findRouteMatch();
+
+		},
+
+		_bindLinks: (links) => {
+			if (links && links.length > 0) {
+				for (let x = 0; links.length > x; x++) {
+					links[x].addEventListener('click', router._bindLink);
+				}
+			}
 		},
 
 		_getPath: () => {
@@ -160,20 +186,24 @@ const sjs = (() => {
 
 		_changeView: (rObj) => {
 			// TODO: add support for sjs-link view
+			let view = (router._defaultView === '') ? elm.get('sjs-view') : router._defaultView;
+			router._defaultView = view;
 
-			if (router._defaultView === '') {
-				// get the default view
-				router._defaultView = elm.get('sjs-view');
+			// override if the link has a view ID
+			if (router._altView && router._altView !== '') {
+				view = elm.get('#' + router._altView);
 			}
 
-			if (router._defaultView !== '') {
+
+			if (view !== '') {
 				if (rObj.view && rObj.view !== '') {
-					let view = elm.get('#' + rObj.view);
+					// override if the router object have a view
+					view = elm.get('#' + rObj.view);
 					if (view) {
 						view.innerHTML = rObj.template;
 					}
 				} else {
-					router._defaultView.innerHTML = rObj.template;
+					view.innerHTML = rObj.template;
 				}
 
 			}
