@@ -111,11 +111,96 @@ const sjs = (() => {
 
 	};
 
+	// ***** the router object
+	let router = {
+		_routes: [],
+		_currentRoute: '',
+		_defaultView: '',
+		_config: {},
+
+		add: (rObj) => {
+			router._routes.push(rObj);
+			return router;
+		},
+
+		init: (config) => {
+			// TODO: getting current route
+			// TODO: override the sjs-links
+			// TODO: listen to the cahnge
+			router._config = config;
+			router._getPath();
+			router._findRouteMatch();
+			return router;
+		},
+
+		_getPath: () => {
+			// console.log(router._routes);
+			// console.log(location);
+			router._currentRoute = location.pathname;
+			// TODO: check config to see if using hash or not
+		},
+
+		_runController: (rObj) => {
+			router._changeView(rObj);
+			if (typeof rObj.controller !== 'undefined') {
+				rObj.controller();
+			}
+		},
+
+		_findRouteMatch: () => {
+			for (let x = 0; router._routes.length > x; x++) {
+				let rObj = router._routes[x];
+				// TODO: do the reg exp here
+				if (rObj.path && rObj.path === router._currentRoute) {
+					router._doTheRoute(rObj);
+					break;
+				}
+			}
+		},
+
+		_changeView: (rObj) => {
+			// TODO: add support for sjs-link view
+
+			if (router._defaultView === '') {
+				// get the default view
+				router._defaultView = elm.get('sjs-view');
+			}
+
+			if (router._defaultView !== '') {
+				if (rObj.view && rObj.view !== '') {
+					let view = elm.get('#' + rObj.view);
+					if (view) {
+						view.innerHTML = rObj.template;
+					}
+				} else {
+					router._defaultView.innerHTML = rObj.template;
+				}
+
+			}
+		},
+
+		_doTheRoute: (rObj) => {
+			// get the route template
+			if (rObj.templateUrl) {
+				if (typeof rObj.template === 'undefined' || (rObj.template && rObj.template === '')) {
+					xhr.get(rObj.templateUrl).then(data => {
+						rObj.template = data;
+						router._runController(rObj);
+					});
+				} else {
+					router._runController(rObj);
+				}
+			} else {
+				router._runController(rObj);
+			}
+		}
+	};
 
 	//--- returning all the functions
 	return {
 		elm: elm,
-		xhr: xhr
+		xhr: xhr,
+		router: router
 	};
 
 
