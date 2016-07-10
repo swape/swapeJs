@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>sjs example elements</title>
+    </head>
+    <body id="main">
+        <nav>
+            <a href="/" sjs-link>Home</a>
+            <a href="/about" sjs-link>About</a>
+            <a href="/about/1/2/3" sjs-link>About with more
+            </a>
+            <a href="/about/?a=1&b=2" sjs-link>About with data</a>
+            <a href="/other" sjs-link="other-view">Other</a>
+        </nav>
+        <sjs-view>111</sjs-view>
+        <sjs-view id="other-view">222</sjs-view>
+
+        <script src="../../dist/sjs.js"></script>
+        <script>
+
+            var r = sjs.router;
+
+            r.add({
+                path: '/',
+                template: '<div>Some content for Home</div>',
+                controller: function() {
+                    console.log('I am the home controller');
+                }
+            }).add({
+                path: '/about',
+                templateUrl: './partial/part1.html',
+                controller: function() {
+                    console.log('I am the about controller');
+                }
+            });
+
+            // showing the content on different view
+            r.add({
+                path: '/example/v0.3/router.html',
+                templateUrl: './partial/part2.html',
+                view: 'other-view',
+                controller: function() {
+                    console.log('I am on this controller');
+                }
+            })
+
+            r.init();
+        </script>
+    </body>
+</html>
