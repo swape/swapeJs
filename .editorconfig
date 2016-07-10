@@ -12,11 +12,7 @@ trim_trailing_whitespace = true
 [*.js]
 indent_style = tab
 
-[*.{styl,html}]
-indent_style = space
-indent_size = 2
-
-[{package.json,.travis.yml}]
+[*.html]
 indent_style = space
 indent_size = 2
 
