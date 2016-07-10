@@ -15,7 +15,7 @@ gulp.task('babel', function () {
 	return gulp.src(['src/sjs.js'])
 		.pipe($.babel({
 			presets: ['es2015'],
-			plugins: ['es6-promise']
+			//plugins: ['es6-promise']
 		}))
 		.pipe(gulp.dest(buildPath));
 });
