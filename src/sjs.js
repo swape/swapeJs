@@ -137,17 +137,27 @@ const sjs = (() => {
 		_bindLink: (e) => {
 			e.preventDefault();
 
-			let aText = e.target.innerText.trim().replace(/ /ig, '_');
+			if (router._currentRoute !== e.target.pathname) {
+				let aText = e.target.innerText.trim().replace(/ /ig, '_');
+
+				if (router._config && typeof router._config.mode !== 'undefined' && router._config.mode === 'history') {
+					window.history.pushState(null, aText, e.target.pathname);
+				} else {
+					location.hash = e.target.pathname;
+				}
+
+				router._getPath();
+				router._altView = e.target.getAttribute('sjs-link');
+				router._findRouteMatch();
+
+			}
+
+			// console.log('-----------------');
+			// console.log('Current route: ' + router._currentRoute);
+			// console.log('route link: ' + e.target.pathname);
+			// console.log('-----------------');
 
 
-			// if (router._config && typeof router._config.mode !== 'undefined' && router._config.mode === 'history') {
-			window.history.pushState(null, aText, e.target.href);
-			// } else {
-			//
-			// }
-			router._getPath();
-			router._altView = e.target.getAttribute('sjs-link');
-			router._findRouteMatch();
 
 		},
 
@@ -162,7 +172,17 @@ const sjs = (() => {
 		_getPath: () => {
 			// console.log(router._routes);
 			// console.log(location);
-			router._currentRoute = location.pathname;
+			if (router._config && typeof router._config.mode !== 'undefined' && router._config.mode === 'history') {
+				router._currentRoute = location.pathname;
+			} else {
+				router._currentRoute = location.hash.replace('#', '').trim();
+			}
+
+			// set to default
+			if (router._currentRoute === '') {
+				router._currentRoute = '/';
+			}
+
 			// TODO: check config to see if using hash or not
 		},
 
@@ -173,12 +193,33 @@ const sjs = (() => {
 			}
 		},
 
+		// run the route based on current route
 		_findRouteMatch: () => {
 			for (let x = 0; router._routes.length > x; x++) {
 				let rObj = router._routes[x];
 				// TODO: do the reg exp here
+				console.log(rObj.path, router._currentRoute);
 				if (rObj.path && rObj.path === router._currentRoute) {
 					router._doTheRoute(rObj);
+					break;
+				}
+			}
+		},
+		// goto to this route
+		goto: (routeName) => {
+			if (routeName && routeName !== '') {
+				router._changeRoute(routeName);
+			}
+		},
+
+		// change the route based on its name
+		_changeRoute: (routeName) => {
+			for (let x = 0; router._routes.length > x; x++) {
+				let rObj = router._routes[x];
+				// TODO: do the reg exp here
+				if (rObj.path && rObj.path !== router._currentRoute && rObj.name && rObj.name === routeName) {
+					router._doTheRoute(rObj);
+					router._currentRoute = routeName;
 					break;
 				}
 			}
