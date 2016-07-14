@@ -111,6 +111,8 @@ const sjs = (() => {
 
 	};
 
+	// TODO: do the route on history change
+
 	// ***** the router object
 	let router = {
 		_routes: [],
@@ -125,9 +127,7 @@ const sjs = (() => {
 		},
 
 		init: (config) => {
-			// TODO: override the sjs-links
 			router._bindLinks(elm.get('a[sjs-link]', true));
-			// TODO: listen to the cahnge
 			router._config = config;
 			router._getPath();
 			router._findRouteMatch();
@@ -157,8 +157,6 @@ const sjs = (() => {
 			// console.log('route link: ' + e.target.pathname);
 			// console.log('-----------------');
 
-
-
 		},
 
 		_bindLinks: (links) => {
@@ -170,8 +168,6 @@ const sjs = (() => {
 		},
 
 		_getPath: () => {
-			// console.log(router._routes);
-			// console.log(location);
 			if (router._config && typeof router._config.mode !== 'undefined' && router._config.mode === 'history') {
 				router._currentRoute = location.pathname;
 			} else {
@@ -183,7 +179,6 @@ const sjs = (() => {
 				router._currentRoute = '/';
 			}
 
-			// TODO: check config to see if using hash or not
 		},
 
 		_runController: (rObj) => {
@@ -195,12 +190,36 @@ const sjs = (() => {
 
 		// run the route based on current route
 		_findRouteMatch: () => {
+			let arrCurrentRoute = router._currentRoute.split('/').filter((i) => i !== '');
+
 			for (let x = 0; router._routes.length > x; x++) {
 				let rObj = router._routes[x];
-				// TODO: do the reg exp here
-				console.log(rObj.path, router._currentRoute);
+				let arrPath = rObj.path.split('/').filter((i) => i !== '');
+				let match = 0;
+
+				// try to get the wildcard match
+				for (let y = 0; arrPath.length > y; y++) {
+					if (typeof arrPath[y] !== 'undefined' && typeof arrCurrentRoute[y] !== 'undefined' && arrPath[y] === arrCurrentRoute[y]) {
+						match++;
+					}
+					if (typeof arrPath[y] !== 'undefined' && arrPath[y] === '*') {
+						match++;
+					}
+				}
+
+				// console.log(arrPath, arrCurrentRoute, match);
+
+				if (match !== 0 && match === arrCurrentRoute.length && arrCurrentRoute[0] === arrPath[0]) {
+					router._doTheRoute(rObj);
+					// console.log('---- Found* ----');
+					break;
+				}
+
+
+
 				if (rObj.path && rObj.path === router._currentRoute) {
 					router._doTheRoute(rObj);
+					// console.log('---- Found ----');
 					break;
 				}
 			}

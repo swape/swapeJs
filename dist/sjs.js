@@ -108,6 +108,8 @@ var sjs = function () {
 
 	};
 
+	// TODO: do the route on history change
+
 	// ***** the router object
 	var router = {
 		_routes: [],
@@ -122,9 +124,7 @@ var sjs = function () {
 		},
 
 		init: function init(config) {
-			// TODO: override the sjs-links
 			router._bindLinks(elm.get('a[sjs-link]', true));
-			// TODO: listen to the cahnge
 			router._config = config;
 			router._getPath();
 			router._findRouteMatch();
@@ -134,16 +134,24 @@ var sjs = function () {
 		_bindLink: function _bindLink(e) {
 			e.preventDefault();
 
-			var aText = e.target.innerText.trim().replace(/ /ig, '_');
+			if (router._currentRoute !== e.target.pathname) {
+				var aText = e.target.innerText.trim().replace(/ /ig, '_');
 
-			// if (router._config && typeof router._config.mode !== 'undefined' && router._config.mode === 'history') {
-			window.history.pushState(null, aText, e.target.href);
-			// } else {
-			//
-			// }
-			router._getPath();
-			router._altView = e.target.getAttribute('sjs-link');
-			router._findRouteMatch();
+				if (router._config && typeof router._config.mode !== 'undefined' && router._config.mode === 'history') {
+					window.history.pushState(null, aText, e.target.pathname);
+				} else {
+					location.hash = e.target.pathname;
+				}
+
+				router._getPath();
+				router._altView = e.target.getAttribute('sjs-link');
+				router._findRouteMatch();
+			}
+
+			// console.log('-----------------');
+			// console.log('Current route: ' + router._currentRoute);
+			// console.log('route link: ' + e.target.pathname);
+			// console.log('-----------------');
 		},
 
 		_bindLinks: function _bindLinks(links) {
@@ -155,10 +163,16 @@ var sjs = function () {
 		},
 
 		_getPath: function _getPath() {
-			// console.log(router._routes);
-			// console.log(location);
-			router._currentRoute = location.pathname;
-			// TODO: check config to see if using hash or not
+			if (router._config && typeof router._config.mode !== 'undefined' && router._config.mode === 'history') {
+				router._currentRoute = location.pathname;
+			} else {
+				router._currentRoute = location.hash.replace('#', '').trim();
+			}
+
+			// set to default
+			if (router._currentRoute === '') {
+				router._currentRoute = '/';
+			}
 		},
 
 		_runController: function _runController(rObj) {
@@ -168,12 +182,59 @@ var sjs = function () {
 			}
 		},
 
+		// run the route based on current route
 		_findRouteMatch: function _findRouteMatch() {
+			var arrCurrentRoute = router._currentRoute.split('/').filter(function (i) {
+				return i !== '';
+			});
+
+			for (var x = 0; router._routes.length > x; x++) {
+				var rObj = router._routes[x];
+				var arrPath = rObj.path.split('/').filter(function (i) {
+					return i !== '';
+				});
+				var match = 0;
+
+				// try to get the wildcard match
+				for (var y = 0; arrPath.length > y; y++) {
+					if (typeof arrPath[y] !== 'undefined' && typeof arrCurrentRoute[y] !== 'undefined' && arrPath[y] === arrCurrentRoute[y]) {
+						match++;
+					}
+					if (typeof arrPath[y] !== 'undefined' && arrPath[y] === '*') {
+						match++;
+					}
+				}
+
+				// console.log(arrPath, arrCurrentRoute, match);
+
+				if (match !== 0 && match === arrCurrentRoute.length && arrCurrentRoute[0] === arrPath[0]) {
+					router._doTheRoute(rObj);
+					// console.log('---- Found* ----');
+					break;
+				}
+
+				if (rObj.path && rObj.path === router._currentRoute) {
+					router._doTheRoute(rObj);
+					// console.log('---- Found ----');
+					break;
+				}
+			}
+		},
+		// goto to this route
+		goto: function goto(routeName) {
+			if (routeName && routeName !== '') {
+				router._changeRoute(routeName);
+			}
+		},
+
+		// change the route based on its name
+		_changeRoute: function _changeRoute(routeName) {
 			for (var x = 0; router._routes.length > x; x++) {
 				var rObj = router._routes[x];
 				// TODO: do the reg exp here
-				if (rObj.path && rObj.path === router._currentRoute) {
+				if (rObj.path && rObj.path !== router._currentRoute && rObj.name && rObj.name === routeName) {
 					router._doTheRoute(rObj);
+					router._currentRoute = routeName;
 					break;
 				}
 			}

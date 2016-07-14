@@ -3,13 +3,14 @@
   <head>
     <meta charset="utf-8">
     <title>sjs example elements</title>
+    <link rel="stylesheet" href="style.css">
   </head>
   <body id="main">
     <nav>
       <a href="/" sjs-link>Home</a>
       <a href="/about" sjs-link>About</a>
-      <a href="/about/1/2/3" sjs-link>About with more
-      </a>
+      <a href="/about/1" sjs-link>About 1</a>
+      <a href="/about/1/2" sjs-link>About 1/2</a>
       <a href="/about/?a=1&b=2" sjs-link>About with data</a>
       <a href="/other" sjs-link="other-view">Other</a>
     </nav>
@@ -25,19 +26,25 @@
         path: '/',
         template: '<div>Some content for Home</div>',
         controller: function() {
-          console.log('I am the home controller');
+          console.info('I am the home controller');
+        }
+      }).add({
+        path: '/about/*',
+        template: '<b>This about page with some data (1) </b>',
+        controller: function() {
+          console.info('I am the about controller 1');
+        }
+      }).add({
+        path: '/about/*/*',
+        template: '<b>This about page with some data (1/2) </b>',
+        controller: function() {
+          console.info('I am the about controller 2');
         }
       }).add({
         path: '/about',
-        templateUrl: '/example/v0.3/partial/part1.html',
+        template: '<b>This is just about page</b>',
         controller: function() {
-          console.log('I am the about controller');
-        }
-      }).add({
-        path: '/other',
-        template: '<b>This should replace the other view</b>',
-        controller: function() {
-          console.log('I am the about controller');
+          console.info('I am the about controller 0');
         }
       });
 
@@ -47,11 +54,11 @@
         templateUrl: '/example/v0.3/partial/part2.html',
         view: 'other-view',
         controller: function() {
-          console.log('I am on this controller');
+          console.info('I am on this controller');
         }
       })
 
-      r.init();
+      r.init({mode: 'hash'});
     </script>
   </body>
 </html>
