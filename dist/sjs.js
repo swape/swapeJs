@@ -2,6 +2,16 @@
 
 var sjs = function () {
 
+	function _notFilter(arr, val) {
+		var ret = [];
+		for (var x = 0; arr.length > x; x++) {
+			if (arr[x] !== val) {
+				ret.push(arr[x]);
+			}
+		}
+		return ret;
+	}
+
 	// prototyping functions for element object
 	function protoTypeThis(obj) {
 		if (obj && typeof obj !== 'undefined') {
@@ -14,6 +24,48 @@ var sjs = function () {
 					}
 				} else {
 					obj.style[key] = val;
+				}
+				return obj;
+			};
+
+			// adding a setClass
+			obj.setClass = function (val) {
+				if (typeof obj.length !== 'undefined') {
+					for (var x = 0; obj.length > x; x++) {
+						obj[x].className = val;
+					}
+				} else {
+					obj.className = val;
+				}
+				return obj;
+			};
+
+			// adding a addClass
+			obj.addClass = function (val) {
+				if (typeof obj.length !== 'undefined') {
+					for (var x = 0; obj.length > x; x++) {
+						obj[x].className = obj[x].className + ' ' + val;
+					}
+				} else {
+					obj.className = obj.className + ' ' + val;
+				}
+				return obj;
+			};
+
+			// adding a removeClass
+			obj.removeClass = function (val) {
+				if (typeof obj.length !== 'undefined') {
+					for (var x = 0; obj.length > x; x++) {
+						if (obj[x].classList.length > 0) {
+							var filtered = _notFilter(obj[x].classList, val);
+							obj[x].className = filtered.join(' ');
+						}
+					}
+				} else {
+					if (obj.classList.length > 0) {
+						var _filtered = _notFilter(obj.classList, val);
+						obj.className = _filtered.join(' ');
+					}
 				}
 				return obj;
 			};
@@ -109,6 +161,7 @@ var sjs = function () {
 	};
 
 	// TODO: do the route on history change
+	// TODO: find the and set the matching link to active on start
 
 	// ***** the router object
 	var router = {
@@ -146,6 +199,10 @@ var sjs = function () {
 				router._getPath();
 				router._altView = e.target.getAttribute('sjs-link');
 				router._findRouteMatch();
+
+				// do the link active and remove the active class from other links
+				elm.get('a[sjs-link]', true).removeClass('active');
+				e.target.className = e.target.className + ' ' + 'active';
 			}
 
 			// console.log('-----------------');

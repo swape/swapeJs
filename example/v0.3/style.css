@@ -8,6 +8,7 @@ nav a{
   text-decoration: none;
   border: 1px solid #446688;
   margin:1px;
+  display: inline-block;
 }
 
 nav a:hover{
@@ -17,4 +18,8 @@ nav a:hover{
 
 nav a.active{
   background-color: #441144;
+}
+body{
+  font-family: sans-serif;
+	color: #333;
 }
