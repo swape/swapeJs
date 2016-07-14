@@ -1,0 +1,20 @@
+nav{
+  padding:10px;
+}
+nav a{
+  padding:5px 10px;
+  background-color: tomato;
+  color:#FFF;
+  text-decoration: none;
+  border: 1px solid #446688;
+  margin:1px;
+}
+
+nav a:hover{
+  boder:1px solid #778899;
+  box-shadow:0 0 15px rgba(0,0,0,0.5) inset;
+}
+
+nav a.active{
+  background-color: #441144;
+}
