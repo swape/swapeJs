@@ -177,15 +177,20 @@ var sjs = function () {
 		},
 
 		init: function init(config) {
-			router._bindLinks(elm.get('a[sjs-link]', true));
 			router._config = config;
+			router._bindAllLinks();
 			router._getPath();
 			router._findRouteMatch();
 			return router;
 		},
 
+		_bindAllLinks: function _bindAllLinks() {
+			router._bindLinks(elm.get('a[sjs-link]:not(.sjs-bound)', true));
+		},
+
 		_bindLink: function _bindLink(e) {
 			e.preventDefault();
+			e.stopPropagation();
 
 			if (router._currentRoute !== e.target.pathname) {
 				var aText = e.target.innerText.trim().replace(/ /ig, '_');
@@ -201,8 +206,7 @@ var sjs = function () {
 				router._findRouteMatch();
 
 				// do the link active and remove the active class from other links
-				elm.get('a[sjs-link]', true).removeClass('active');
-				e.target.className = e.target.className + ' ' + 'active';
+				router._makeActiveLink(e);
 			}
 
 			// console.log('-----------------');
@@ -211,10 +215,17 @@ var sjs = function () {
 			// console.log('-----------------');
 		},
 
+		_makeActiveLink: function _makeActiveLink(e) {
+			elm.get('a[sjs-link]', true).removeClass('active');
+			e.target.className = e.target.className + ' ' + 'active';
+		},
+
 		_bindLinks: function _bindLinks(links) {
 			if (links && links.length > 0) {
 				for (var x = 0; links.length > x; x++) {
+					//TODO: this might make memory leak... we should gather all and run unbind
 					links[x].addEventListener('click', router._bindLink);
+					links[x].className += ' sjs-bound';
 				}
 			}
 		},
@@ -317,6 +328,8 @@ var sjs = function () {
 				} else {
 					view.innerHTML = rObj.template;
 				}
+				// run the binding of links again
+				router._bindAllLinks();
 			}
 		},
 
