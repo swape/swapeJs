@@ -1,25 +1,51 @@
 nav{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  background-color: #D3CECA;
+  margin-bottom: 30px;
   padding:10px;
 }
 nav a{
   padding:5px 10px;
-  background-color: tomato;
+  background-color: #928B82;
   color:#FFF;
   text-decoration: none;
-  border: 1px solid #446688;
+  border: 1px solid #706B64;
+  flex: 0 0 auto;
+  min-width: 120px;
+  text-align: center;
   margin:1px;
-  display: inline-block;
 }
 
 nav a:hover{
-  boder:1px solid #778899;
+  boder:1px solid rgba(0,0,0,0.5);
   box-shadow:0 0 15px rgba(0,0,0,0.5) inset;
 }
 
 nav a.active{
-  background-color: #441144;
+  background-color: rgba(0,100,0,0.3);
 }
 body{
   font-family: sans-serif;
 	color: #333;
+  background-color: #DDD8D3;
+}
+body,html{
+  margin:0;
+  padding:0;
+}
+
+sjs-view{
+  padding:20px;
+  background-color: #eee;
+  margin: 5px 0;
+  border: 1px solid #928B82;
+  flex: 1 1 auto;
+}
+section{
+  margin:10px 30px;
+  display: flex;
+  justify-content: center;
+  flex-direction:column;
 }

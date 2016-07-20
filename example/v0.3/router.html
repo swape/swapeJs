@@ -8,14 +8,16 @@
   <body id="main">
     <nav>
       <a href="/" sjs-link>Home</a>
-      <a href="/about" sjs-link>About</a>
-      <a href="/about/1" sjs-link>About 1</a>
-      <a href="/about/1/2" sjs-link>About 1/2</a>
-      <a href="/about/?a=1&b=2" sjs-link>About with data</a>
+      <a href="/about" sjs-link="other-view">About</a>
+      <a href="/about/12/edit" sjs-link>About with E</a>
+      <a href="/about/13/view" sjs-link="other-view">About with V</a>
+      <a href="/about/123" sjs-link>About with data</a>
       <a href="/other" sjs-link="other-view">Other</a>
     </nav>
-    <sjs-view>111</sjs-view>
-    <sjs-view id="other-view">222</sjs-view>
+    <section>
+      <sjs-view>111</sjs-view>
+      <sjs-view id="other-view">222</sjs-view>
+    </section>
 
     <script src="../../dist/sjs.js"></script>
     <script>
@@ -36,8 +38,14 @@
           console.info('I am the about controller 1');
         }
       }).add({
-        path: '/about/*/*',
-        template: '<b>This about page with some data (1/2) </b>',
+        path: '/about/*/edit',
+        template: '<b>This about page with some data Edit</b>',
+        controller: function() {
+          console.info('I am the about controller 2');
+        }
+      }).add({
+        path: '/about/*/view',
+        template: '<b>This about page with some data View </b>',
         controller: function() {
           console.info('I am the about controller 2');
         }
