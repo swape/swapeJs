@@ -164,7 +164,6 @@ const sjs = (() => {
 	};
 
 	// TODO: do the route on history change
-	// TODO: find the and set the matching link to active on start
 
 	// ***** the router object
 	let router = {
@@ -226,10 +225,6 @@ const sjs = (() => {
 				router._markActiveLink();
 			}
 
-			// console.log('-----------------');
-			// console.log('Current route: ' + router._currentRoute);
-			// console.log('route link: ' + e.target.pathname);
-			// console.log('-----------------');
 		},
 		_makeActiveLink: (e) => {
 			elm.get('a[sjs-link]', true).removeClass('active');
