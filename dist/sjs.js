@@ -181,7 +181,21 @@ var sjs = function () {
 			router._bindAllLinks();
 			router._getPath();
 			router._findRouteMatch();
+			router._markActiveLink();
 			return router;
+		},
+		_markActiveLink: function _markActiveLink() {
+			var links = elm.get('a[sjs-link]', true);
+			if (links && links.length > 0) {
+				for (var x = 0; links.length > x; x++) {
+					var e = links[x];
+
+					if (router._currentRoute === e.pathname) {
+						router._makeActiveLink(e);
+						break;
+					}
+				}
+			}
 		},
 
 		_bindAllLinks: function _bindAllLinks() {
@@ -193,9 +207,9 @@ var sjs = function () {
 			e.stopPropagation();
 
 			if (router._currentRoute !== e.target.pathname) {
-				var aText = e.target.innerText.trim().replace(/ /ig, '_');
 
 				if (router._config && typeof router._config.mode !== 'undefined' && router._config.mode === 'history') {
+					var aText = e.target.innerText.trim().replace(/ /ig, '_');
 					window.history.pushState(null, aText, e.target.pathname);
 				} else {
 					location.hash = e.target.pathname;
@@ -206,7 +220,7 @@ var sjs = function () {
 				router._findRouteMatch();
 
 				// do the link active and remove the active class from other links
-				router._makeActiveLink(e);
+				router._markActiveLink();
 			}
 
 			// console.log('-----------------');
@@ -214,15 +228,15 @@ var sjs = function () {
 			// console.log('route link: ' + e.target.pathname);
 			// console.log('-----------------');
 		},
-
 		_makeActiveLink: function _makeActiveLink(e) {
 			elm.get('a[sjs-link]', true).removeClass('active');
-			e.target.className = e.target.className + ' ' + 'active';
+			e.className = e.className + ' ' + 'active';
 		},
 
 		_bindLinks: function _bindLinks(links) {
 			if (links && links.length > 0) {
 				for (var x = 0; links.length > x; x++) {
+					// console.log('binding: ' + links[x]);
 					//TODO: this might make memory leak... we should gather all and run unbind
 					links[x].addEventListener('click', router._bindLink);
 					links[x].className += ' sjs-bound';
@@ -273,17 +287,15 @@ var sjs = function () {
 					}
 				}
 
-				// console.log(arrPath, arrCurrentRoute, match);
+				if (rObj.path && rObj.path === router._currentRoute) {
+					router._doTheRoute(rObj);
+					//console.log('---- Found ----');
+					break;
+				}
 
 				if (match !== 0 && match === arrCurrentRoute.length && arrCurrentRoute[0] === arrPath[0]) {
 					router._doTheRoute(rObj);
 					// console.log('---- Found* ----');
-					break;
-				}
-
-				if (rObj.path && rObj.path === router._currentRoute) {
-					router._doTheRoute(rObj);
-					// console.log('---- Found ----');
 					break;
 				}
 			}
