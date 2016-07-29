@@ -184,7 +184,22 @@ const sjs = (() => {
 			router._getPath();
 			router._findRouteMatch();
 			router._markActiveLink();
+			router._historyChange();
 			return router;
+		},
+
+		_historyChange: () => {
+
+			window.onhashchange = () => {
+				router._getPath();
+				router._findRouteMatch();
+			};
+
+			window.onpopstate = () => {
+				router._getPath();
+				router._findRouteMatch();
+			};
+
 		},
 		_markActiveLink: () => {
 			let links = elm.get('a[sjs-link]', true);

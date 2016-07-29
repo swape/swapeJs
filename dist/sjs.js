@@ -181,7 +181,21 @@ var sjs = function () {
 			router._getPath();
 			router._findRouteMatch();
 			router._markActiveLink();
+			router._historyChange();
 			return router;
+		},
+
+		_historyChange: function _historyChange() {
+
+			window.onhashchange = function () {
+				router._getPath();
+				router._findRouteMatch();
+			};
+
+			window.onpopstate = function () {
+				router._getPath();
+				router._findRouteMatch();
+			};
 		},
 		_markActiveLink: function _markActiveLink() {
 			var links = elm.get('a[sjs-link]', true);
@@ -191,7 +205,6 @@ var sjs = function () {
 
 					if (router._currentRoute === e.pathname) {
 						router._makeActiveLink(e);
-						break;
 					}
 				}
 			}
