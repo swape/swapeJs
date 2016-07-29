@@ -194,7 +194,6 @@ const sjs = (() => {
 
 					if (router._currentRoute === e.pathname) {
 						router._makeActiveLink(e);
-						break;
 					}
 				}
 			}
