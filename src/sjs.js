@@ -163,8 +163,6 @@ const sjs = (() => {
 
 	};
 
-	// TODO: do the route on history change
-
 	// ***** the router object
 	let router = {
 		_routes: [],
@@ -190,14 +188,11 @@ const sjs = (() => {
 
 		_historyChange: () => {
 
-			window.onhashchange = () => {
-				router._getPath();
-				router._findRouteMatch();
-			};
-
 			window.onpopstate = () => {
+				// console.log('state');
 				router._getPath();
 				router._findRouteMatch();
+				router._markActiveLink();
 			};
 
 		},
@@ -223,6 +218,8 @@ const sjs = (() => {
 			e.stopPropagation();
 
 			if (router._currentRoute !== e.target.pathname) {
+				// console.log('click');
+				router._altView = e.target.getAttribute('sjs-link');
 
 				if (router._config && typeof router._config.mode !== 'undefined' && router._config.mode === 'history') {
 					let aText = e.target.innerText.trim().replace(/ /ig, '_');
@@ -231,12 +228,9 @@ const sjs = (() => {
 					location.hash = e.target.pathname;
 				}
 
-				router._getPath();
-				router._altView = e.target.getAttribute('sjs-link');
-				router._findRouteMatch();
-
-				// do the link active and remove the active class from other links
-				router._markActiveLink();
+				//router._getPath();
+				//router._findRouteMatch();
+				//router._markActiveLink();
 			}
 
 		},
@@ -257,6 +251,7 @@ const sjs = (() => {
 		},
 
 		_getPath: () => {
+			// console.log('path');
 			if (router._config && typeof router._config.mode !== 'undefined' && router._config.mode === 'history') {
 				router._currentRoute = location.pathname;
 			} else {
