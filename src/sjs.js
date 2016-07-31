@@ -189,7 +189,6 @@ const sjs = (() => {
 		_historyChange: () => {
 
 			window.onpopstate = () => {
-				// console.log('state');
 				router._getPath();
 				router._findRouteMatch();
 				router._markActiveLink();
@@ -218,7 +217,6 @@ const sjs = (() => {
 			e.stopPropagation();
 
 			if (router._currentRoute !== e.target.pathname) {
-				// console.log('click');
 				router._altView = e.target.getAttribute('sjs-link');
 
 				if (router._config && typeof router._config.mode !== 'undefined' && router._config.mode === 'history') {
@@ -243,7 +241,7 @@ const sjs = (() => {
 			if (links && links.length > 0) {
 				for (let x = 0; links.length > x; x++) {
 					// console.log('binding: ' + links[x]);
-					//TODO: this might make memory leak... we should gather all and run unbind
+					//TODO: this might leak... we should gather all and run unbind
 					links[x].addEventListener('click', router._bindLink);
 					links[x].className += ' sjs-bound';
 				}
@@ -251,7 +249,6 @@ const sjs = (() => {
 		},
 
 		_getPath: () => {
-			// console.log('path');
 			if (router._config && typeof router._config.mode !== 'undefined' && router._config.mode === 'history') {
 				router._currentRoute = location.pathname;
 			} else {
@@ -293,13 +290,11 @@ const sjs = (() => {
 
 				if (rObj.path && rObj.path === router._currentRoute) {
 					router._doTheRoute(rObj);
-					//console.log('---- Found ----');
 					break;
 				}
 
 				if (match !== 0 && match === arrCurrentRoute.length && arrCurrentRoute[0] === arrPath[0]) {
 					router._doTheRoute(rObj);
-					// console.log('---- Found* ----');
 					break;
 				}
 
@@ -326,7 +321,6 @@ const sjs = (() => {
 		},
 
 		_changeView: (rObj) => {
-			// TODO: add support for sjs-link view
 			let view = (router._defaultView === '') ? elm.get('sjs-view') : router._defaultView;
 			router._defaultView = view;
 
@@ -334,7 +328,6 @@ const sjs = (() => {
 			if (router._altView && router._altView !== '') {
 				view = elm.get('#' + router._altView);
 			}
-
 
 			if (view !== '') {
 				if (rObj.view && rObj.view !== '') {
@@ -374,6 +367,5 @@ const sjs = (() => {
 		xhr: xhr,
 		router: router
 	};
-
 
 })();
