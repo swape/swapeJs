@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>sjs example elements</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body id="main">
+    <nav>
+      <a href="/" sjs-link>Home</a>
+      <a href="/page1" sjs-link>Page 1</a>
+      <a href="/page2" sjs-link>Page 2</a>
+    </nav>
+    <section>
+      <sjs-view>111</sjs-view>
+    </section>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.js"></script>
+    <script src="../../dist/sjs.js"></script>
+    <script>
+
+      var r = sjs.router;
+
+      r.add({
+        path: '/',
+        templateUrl: '/example/v0.3/partial/part2.html',
+        name: 'home',
+        controller: function() {
+          console.info('I am the home controller');
+        }
+      }).add({
+        path: '/page1',
+        templateUrl: '/example/v0.3/partial/page1.html',
+        handelbars: true,
+        controller: function() {
+          console.info('this is from page 1');
+          return {something: 'Hello', other: 'World'};
+        }
+      }).add({
+        path: '/page2',
+        templateUrl: '/example/v0.3/partial/page2.html',
+        handelbars: true,
+        controller: function() {
+          console.info('I am from page 2');
+          return {
+            other: 'Template',
+            something: function() {
+              return 1 + 2;
+            },
+            alist: [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9
+            ]
+          };
+        }
+      });
+
+      r.init({mode: 'hash'});
+    </script>
+  </body>
+</html>

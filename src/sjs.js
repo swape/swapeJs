@@ -1,3 +1,4 @@
+/* global Handlebars */
 'use strict';
 
 const sjs = (() => {
@@ -171,6 +172,7 @@ const sjs = (() => {
 		_config: {},
 		_altView: '',
 
+
 		add: (rObj) => {
 			router._routes.push(rObj);
 			return router;
@@ -264,8 +266,8 @@ const sjs = (() => {
 
 		_runController: (rObj) => {
 			router._changeView(rObj);
-			if (typeof rObj.controller !== 'undefined') {
-				rObj.controller();
+			if (typeof rObj.controller !== 'undefined' && !rObj.handelbars) {
+				rObj.controller(); // we do not run this here if this is handlebars
 			}
 		},
 
@@ -333,11 +335,18 @@ const sjs = (() => {
 				if (rObj.view && rObj.view !== '') {
 					// override if the router object have a view
 					view = elm.get('#' + rObj.view);
-					if (view) {
+				}
+
+				if (view) {
+					// if handelbars, then we have to wait for the controller to return object.
+					if (rObj.handelbars && rObj.controller) {
+						let objRet = rObj.controller();
+						let compiled = Handlebars.compile(rObj.template);
+						view.innerHTML = compiled(objRet);
+					} else {
 						view.innerHTML = rObj.template;
 					}
-				} else {
-					view.innerHTML = rObj.template;
+
 				}
 				// run the binding of links again
 				router._bindAllLinks();
