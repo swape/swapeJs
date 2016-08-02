@@ -374,7 +374,8 @@ const sjs = (() => {
 	return {
 		elm: elm,
 		xhr: xhr,
-		router: router
+		router: router,
+		v: '0.3'
 	};
 
 })();
