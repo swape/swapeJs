@@ -1,6 +1,12 @@
 /* global Handlebars */
 'use strict';
 
+// TODO: remove Handlebars
+// TODO: add beforeTemplateFetch
+// TODO: add afterTemplateFetch
+// TODO: replace template tags with other stuff
+// TODO: directives?
+
 const sjs = (() => {
 
 	function _notFilter(arr, val) {
@@ -251,7 +257,7 @@ const sjs = (() => {
 		},
 
 		_getPath: () => {
-			if (router._config && typeof router._config.mode !== 'undefined' && router._config.mode === 'history') {
+			if (router._config && router._config.mode && router._config.mode === 'history') {
 				router._currentRoute = location.pathname;
 			} else {
 				router._currentRoute = location.hash.replace('#', '').trim();
