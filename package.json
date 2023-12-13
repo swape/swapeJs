@@ -1,14 +1,32 @@
 {
     "name": "swapejs",
-    "version": "1.0.0",
-    "description": "Javascript library",
-    "main": "gulpfile.js",
+    "version": "2.0.0",
+    "description": "Javascript micro-frontend",
+    "main": "./dist/sjs.js",
+    "module": "./dist/sjs.js",
+    "typings": "./dist/main.d.ts",
+    "type": "module",
+    "files": [
+        "dist"
+    ],
+    "exports": {
+        ".": {
+            "import": "./dist/sjs.js",
+            "require": "./dist/sjs.umd.cjs"
+        }
+    },
+    "target": "ES2022",
     "directories": {
         "example": "example",
         "test": "test"
     },
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "dev": "vite",
+        "build": "tsc && vite build",
+        "preview": "vite preview",
+        "pack-dry": "npm pack --dry-run",
+        "pack": "npm pack",
+        "prettier-format": "prettier --config .prettierrc 'src/**/*.ts' --write"
     },
     "repository": {
         "type": "git",
@@ -21,11 +39,14 @@
     },
     "homepage": "https://github.com/swape/swapeJs#readme",
     "devDependencies": {
-        "babel-plugin-es6-promise": "^1.0.0",
-        "babel-preset-es2015": "^6.9.0",
-        "gulp": "^3.9.1",
-        "gulp-babel": "^6.1.2",
-        "gulp-load-plugins": "^1.2.4",
-        "gulp-uglifyjs": "^0.6.2"
+        "@types/node": "^20.10.4",
+        "@typescript-eslint/eslint-plugin": "^6.13.2",
+        "@typescript-eslint/parser": "^6.13.2",
+        "eslint": "^8.55.0",
+        "eslint-config-prettier": "^9.1.0",
+        "eslint-plugin-prettier": "^5.0.1",
+        "prettier": "^3.1.0",
+        "vite": "^5.0.6",
+        "vite-plugin-dts": "^3.6.4"
     }
 }
