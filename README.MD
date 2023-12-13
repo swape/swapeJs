@@ -1,23 +1,20 @@
-# swapeJs
+# SwapeJs
 
-swapeJs is a lightweight javascript front-end framework.
+SwapeJs is a lightweight micro-frontend javascript framework.
+
+## v2
+
+After 8 years with stable v0.3 it was about time to make this framework
+more modern and up to date. So I decided to rewrite it from scratch.
 
 ## Setting up
 
-First include the sjs script in your html `<script src="sjs.js"></script>`
 
-## Old sjs
 
-if you are looking for the old sjs version, then see here:
-
-```
-README_v0.1.MD
-src/sjs_0.1.js
-```
 
 ## element
 
-```
+```javascript
 // getting element object
 var e = sjs.elm;
 var elementObject = e.get('h1');
@@ -49,37 +46,9 @@ e.getAll('p').addClass('someClass');
 e.getAll('p').removeClass('someClass');
 ```
 
-## xhr
-
-```
-var x = sjs.xhr;
-
-// getting xhr data
-x.get('./partial/part1.html').then(function(data) {
-  console.log(data);
-});
-
-// posting xhr data
-x.xhr('POST', './partial/part2.html', {
-  x: 1,
-  y: 2
-}).then(function(data) {
-  console.log(data);
-});
-
-// or
-
-x.post('./partial/part2.html', {
-  x: 1,
-  y: 2
-}).then(function(data) {
-  console.log(data);
-});
-```
-
 ## router
 
-```
+```javascript
 // define a router
 var r = sjs.router;
 
@@ -109,9 +78,9 @@ r.add({
 });
 ```
 
-### route object
+### route and router
 
-```
+```javascript
 r.add([object]);
 
 routeObject = {
@@ -128,35 +97,3 @@ routeObject = {
 - 'templateUrl' is a path from where to load the template (optional)
 - 'template' is a string instead of templateUrl (optional).
 - 'view' is an alternative view that can be declared like this:
-
-  <sjs-view id="other-view">
-  </sjs-view>
-
-  otherwise the default view is used
-
-  <sjs-view>
-  </sjs-view>
-
-  . you can also target a different view from a sjs-link attribute like this [Other](/other) otherwise [Other](/other) is going to target
-
-  <sjs-view>
-  </sjs-view>
-
-  (optional)
-
-- 'name' this is to call the route something so that you can use r.goto(routeName); (optional)
-- 'handelbars' must be set to true if you want to use handelbars for templating and the controller return an object that handelbars can use.
-
-### route init
-
-```
-r.init({mode: 'hash'});
-
-or
-
-r.init({mode: 'history'});
-```
-
-# examples
-
-See the /example/v0.3 for all the examples
