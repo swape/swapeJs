@@ -1,0 +1,59 @@
+@import "https://unpkg.com/open-props";
+
+body{
+    background-image: var(--gradient-7);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100% 100%;
+  color: var(--gray-9);
+    font-size: var(--font-size-3);
+  padding: 0;
+  margin: 0;
+    font-family: var(--font-sans);
+}
+body *{
+    box-sizing: border-box;
+}
+main,nav >ul{
+    margin-inline: auto;
+    max-width: 1024px;
+    padding: var(--size-1) var(--size-5);
+}
+nav{
+    background-color: var(--stone-3);
+    padding: var(--size-1) 0;
+}
+nav ul{
+    --link-bg: white;
+    --link-text: var(--gray-7);
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--size-2);
+    list-style: none;
+}
+nav ul li{
+    display: flex;
+}
+nav ul a{
+    background-color: var(--link-bg);
+    color: var(--link-text);
+    padding: var(--size-2) var(--size-5);
+    text-decoration: none;
+    border-radius: var(--radius-2);
+    outline-offset: 2px;
+}
+nav ul a:hover,nav ul a.active{
+    --link-bg: var(--indigo-10);
+    --link-text: var(--indigo-0);
+    outline: 2px solid var(--indigo-6);
+
+}
+main{
+    margin-top: var(--size-5);
+}
+.red{
+    color: var(--red-7);
+    padding: var(--size-10);
+    background-color: var(--red-2);
+}
