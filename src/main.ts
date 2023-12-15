@@ -1,25 +1,6 @@
-interface Config {
-  templatesPath: string
-  startNode: string
-  errorPage?: string
-}
-
-interface SjsObj {
-  config: Config
-  routes: Route[]
-}
-
-interface Routes {
-  add: (route: Route) => void
-}
-
-interface Route {
-  templateUrl: string
-  path: string
-  controller?: (dynamicValues?: string[]) => void
-  startNode?: string
-  prefetch?: boolean
-}
+import type { Route, Routes, SjsObj } from './types'
+import { getTemplate } from './template'
+import { cleanHtml, getCurrentRoute, matchRoute } from './helpers'
 
 const sjsObj: SjsObj = {
   config: {
@@ -93,6 +74,7 @@ export function start() {
       })
     }
   })
+
   if (!foundRoute) {
     renderErrorPage()
   }
@@ -102,7 +84,7 @@ function getTemplatePathAndExternal(route: Route) {
   let path = route.templateUrl
   let external = true
   if (!path.startsWith('http')) {
-    path = '/' + sjsObj.config.templatesPath + '/' + route.templateUrl
+    path = `/${sjsObj.config.templatesPath}/${route.templateUrl}`
     external = false
   }
   return { path, external }
@@ -145,39 +127,4 @@ function renderTemplate(route: Route) {
       }
     }
   })
-}
-
-function cleanHtml(html: string) {
-  html = html.replace(/<style([\s\S]*?)<\/style>/gi, '')
-  html = html.replace(/<script([\s\S]*?)<\/script>/gi, '')
-  html = html.replace(/<head([\s\S]*?)<\/head>/gi, '')
-  return html
-}
-
-function getCurrentRoute() {
-  return window.location.pathname
-}
-function matchRoute(currentRoute: string, matchRoute: string) {
-  if (matchRoute === '/') {
-    return matchRoute === currentRoute
-  }
-
-  const regex = new RegExp(matchRoute.replace('*', '.*'))
-  return regex.test(currentRoute)
-}
-
-interface CachedTemplates {
-  [key: string]: string
-}
-
-const cachedTemplates: CachedTemplates = {}
-async function getTemplate(templateUrl: string) {
-  if (cachedTemplates[templateUrl]) {
-    return new Promise((resolve) => resolve(cachedTemplates[templateUrl]))
-  }
-
-  const res = await fetch(templateUrl)
-  const template = await res.text()
-  cachedTemplates[templateUrl] = template
-  return template
 }
