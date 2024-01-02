@@ -1,3 +1,19 @@
+const o = {};
+async function l(t) {
+  if (o[t])
+    return new Promise((n) => n(o[t]));
+  const e = await (await fetch(t)).text();
+  return o[t] = e, e;
+}
+function u(t) {
+  return t = t.replace(/<style([\s\S]*?)<\/style>/gi, ""), t = t.replace(/<script([\s\S]*?)<\/script>/gi, ""), t = t.replace(/<head([\s\S]*?)<\/head>/gi, ""), t;
+}
+function i() {
+  return window.location.pathname;
+}
+function h(t, r) {
+  return r === "/" ? r === t : new RegExp(r.replace("*", ".*")).test(t);
+}
 const a = {
   config: {
     templatesPath: "pages",
@@ -13,72 +29,56 @@ const a = {
 function m() {
   document.querySelectorAll("a:not(.listener-added)").forEach((t) => {
     const r = t.getAttribute("target"), e = t.getAttribute("href");
-    r || `${e}`.startsWith("http") || (t.classList.add("listener-added"), e && e === f() && t.classList.add("active"), t.addEventListener("click", (n) => {
+    r || `${e}`.startsWith("http") || (t.classList.add("listener-added"), e && e === i() && t.classList.add("active"), t.addEventListener("click", (n) => {
       var s;
-      if ((s = document.querySelector("a.active")) == null || s.classList.remove("active"), t.classList.toggle("active"), n.preventDefault(), e && e !== f()) {
+      if ((s = document.querySelector("a.active")) == null || s.classList.remove("active"), t.classList.toggle("active"), n.preventDefault(), e && e !== i()) {
         window.history.pushState(null, "", e);
         let d = !1;
         a.routes.forEach((c) => {
-          g(e, c.path) && c.path !== "*" && (u(c), c.path !== "*" && (d = !0));
-        }), d || i();
+          h(e, c.path) && c.path !== "*" && (g(c), c.path !== "*" && (d = !0));
+        }), d || f();
       }
     }));
   });
 }
 function v() {
-  const t = f();
+  const t = i();
   let r = !1;
   a.routes.forEach((e) => {
-    if (g(t, e.path))
-      u(e), e.path !== "*" && (r = !0);
+    if (h(t, e.path))
+      g(e), e.path !== "*" && (r = !0);
     else if (e.prefetch) {
-      const { path: n } = l(e);
-      p(n).catch(() => {
-        i();
+      const { path: n } = p(e);
+      l(n).catch(() => {
+        f();
       });
     }
-  }), r || i();
+  }), r || f();
 }
-function l(t) {
+function p(t) {
   let r = t.templateUrl, e = !0;
-  return r.startsWith("http") || (r = "/" + a.config.templatesPath + "/" + t.templateUrl, e = !1), { path: r, external: e };
+  return r.startsWith("http") || (r = `/${a.config.templatesPath}/${t.templateUrl}`, e = !1), { path: r, external: e };
 }
-function i() {
-  const { path: t } = l({
+function f() {
+  const { path: t } = p({
     templateUrl: a.config.errorPage,
     path: "*",
     controller: () => {
     }
   });
-  p(t).then((r) => {
+  l(t).then((r) => {
     const e = document.getElementById(a.config.startNode);
-    e && (e.innerHTML = h(r));
+    e && (e.innerHTML = u(r));
   });
 }
-function u(t) {
+function g(t) {
   if (!t.templateUrl && t.controller)
     return t.controller();
-  const { path: r, external: e } = l(t);
-  p(r).then((n) => {
+  const { path: r, external: e } = p(t);
+  l(r).then((n) => {
     const s = document.getElementById(t.startNode || a.config.startNode);
-    s && (e && (n = h(n)), s.innerHTML = n, m(), t.controller && t.controller());
+    s && (e && (n = u(n)), s.innerHTML = n, m(), t.controller && t.controller());
   });
-}
-function h(t) {
-  return t = t.replace(/<style([\s\S]*?)<\/style>/gi, ""), t = t.replace(/<script([\s\S]*?)<\/script>/gi, ""), t = t.replace(/<head([\s\S]*?)<\/head>/gi, ""), t;
-}
-function f() {
-  return window.location.pathname;
-}
-function g(t, r) {
-  return r === "/" ? r === t : new RegExp(r.replace("*", ".*")).test(t);
-}
-const o = {};
-async function p(t) {
-  if (o[t])
-    return new Promise((n) => n(o[t]));
-  const e = await (await fetch(t)).text();
-  return o[t] = e, e;
 }
 export {
   E as routes,
